@@ -1,3 +1,0 @@
-"/opt/homebrew/Cellar/cmake/3.30.5/bin/cmake" -E remove -f ../lib/libst.a
-/Library/Developer/CommandLineTools/usr/bin/ar cq ../lib/libst.a CMakeFiles/CUDD_ST_LIB.dir/st.c.o
-/Library/Developer/CommandLineTools/usr/bin/ranlib ../lib/libst.a
