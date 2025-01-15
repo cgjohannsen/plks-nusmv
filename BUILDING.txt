@@ -1,0 +1,14 @@
+Add the following somewhere in CMakeLists.txt:
+
+    find_package(Python2 REQUIRED)
+
+    # Set the Python interpreter to use
+    set(PYTHON_EXECUTABLE ${Python2_EXECUTABLE})
+
+Then run:
+
+    cd path/to/NuSMV-2.6.0/NuSMV
+    mkdir build
+    cd build
+    cmake .. 
+    make

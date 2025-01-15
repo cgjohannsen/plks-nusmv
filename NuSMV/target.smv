@@ -1,0 +1,67 @@
+MODULE main
+VAR
+  bit_0 : counter_cell(TRUE);
+  bit_1 : counter_cell(bit_0.carry_out);
+  bit_2 : counter_cell(bit_1.carry_out);
+
+-- need to add:
+-- 1. A new type for decisions (three-valued)
+-- 2. A way to assign costs/risks to each decision
+-- 3. A way to enable/disable decisions based on other decisions
+-- 4. An expression for computing if a decision is taken or not
+-- Now instead of just returning whether a spec holds or not, we compute the minimum cost/risk of satisfying the spec
+
+MODULE counter_cell(carry_in)
+VAR
+  value : boolean;
+  dec1, dec2: decision; -- can be true/false/unknown
+ASSIGN
+  init(value) := FALSE;
+  next(value) := value xor carry_in;
+
+  cost(dec1) := 3; -- alt: risk(dec1) := 3;
+  cost(dec2) := 5;
+
+  -- make dec1 and dec2 mutually exclusive
+  enable(dec1) := !is_taken(dec2);
+  enable(dec2) := !is_taken(dec1);
+
+DEFINE
+  carry_out := value & carry_in;
+
+SPEC
+  spec0: AG AF (bit_2.carry_out & dec_value(dec1))
+
+
+
+-- SPEC
+--   AG AF bit_1.carry_out
+
+-- SPEC
+--   AG AF bit_0.carry_out
+
+-- PSLSPEC
+--   AG AF bit_1.carry_out;
+
+-- PSLSPEC
+--   G F bit_1.carry_out;
+
+-- PSLSPEC
+--   always eventually! bit_1.carry_out;
+
+-- PSLSPEC
+--   AG AF bit_2.carry_out;
+
+-- PSLSPEC
+--   G F bit_2.carry_out;
+
+-- PSLSPEC
+--   always eventually! bit_2.carry_out;
+
+-- PSLSPEC
+-- --  forall i in {0:2}: G F bit[i].carry_out;
+--   (G F bit_0.carry_out) & (G F bit_1.carry_out) & (G F bit_2.carry_out);
+
+-- PSLSPEC
+-- --  forall i in {0:2}: always eventually! bit[i].carry_out;
+--   (always eventually! bit_0.carry_out) & (always eventually! bit_1.carry_out) & (always eventually! bit_2.carry_out)
